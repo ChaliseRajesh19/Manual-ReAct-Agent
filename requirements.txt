@@ -12,3 +12,8 @@ streamlit
 pypdf
 langchain-core
 langgraph
+uvicorn
+fastapi
+pydantic
+langchain-core
+requests

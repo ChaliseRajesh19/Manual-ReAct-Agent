@@ -5,7 +5,7 @@ A hand-built ReAct agent for BCT exam preparation, using LangGraph's `StateGraph
 
 ## What this is
 
-Project 3 in my GenAI learning roadmap. Project 2 used `create_react_agent` (a black box). This project rebuilds the same agent loop manually to understand how it actually works.
+Project 3 in my GenAI learning roadmap. ExamBuddy used `create_react_agent` (a black box). This project rebuilds the same agent loop manually to understand how it actually works.
 
 ## How it works
 

@@ -1,31 +1,42 @@
-# main.py
+from langchain_core.messages import HumanMessage, AIMessage
+from graph.graph import build_graph
 import os
 from dotenv import load_dotenv
+
 load_dotenv()  # MUST be first — before any langchain imports
 
-from langchain_core.messages import HumanMessage,AIMessage
-from graph.graph import build_graph
+graph = build_graph()
 
-def run_agent(query: str):
-    # Build the graph
-    graph = build_graph()
-    
-    # Put user query into the notebook as a HumanMessage
-    initial_state = {"messages": [HumanMessage(content=query)]}
-    
+session_memory = {}
+
+
+def run_agent(query: str, session_id: str = None):
+
+    if session_id not in session_memory:
+        session_memory[session_id] = {"messages": []}
+
+    memory = session_memory[session_id]
+
+    # Add the new user message to this session's history
+    memory["messages"].append(HumanMessage(content=query))
+
+    # Build the dict the graph expects, using the FULL history
+    initial_state = {"messages": memory["messages"]}
+
     # Run the graph
-    result = graph.invoke(initial_state,config={"recursion_limit": 4})
+    result = graph.invoke(initial_state, config={"recursion_limit": 10})
 
-
-    
-    # Last message in notebook = final answer
+    # Last message = final answer
     final_answer = result["messages"][-1].content
-    print("\n--- Final Answer ---")
-    print(final_answer)
+
+    # Save the agent's reply into history too
+    memory["messages"].append(AIMessage(content=final_answer))
+
+    return final_answer
+
 
 if __name__ == "__main__":
+    session_id = "abc123"  # You can change this to manage different sessions
     while True:
         query = input("Ask ExamBuddy: ")
-        run_agent(query)
-
-        
+        run_agent(query, session_id)

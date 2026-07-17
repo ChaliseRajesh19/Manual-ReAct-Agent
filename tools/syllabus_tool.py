@@ -38,17 +38,5 @@ def load_syllabus_info(syllabus_store, query):
         return docs_str
     
     docs_str = format_docs(relevant_docs)
-
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", "You are a helpful assistant that provides information based on the syllabus provided as context\n{context}"),
-            ("human", "{input}")
-        ]
-    )
-
-    llm = get_llm(model_name=MODEL_NAME, temperature=0.7)
-
-    chain = prompt | llm | StrOutputParser()
-
-    return chain,docs_str
+    return docs_str
 

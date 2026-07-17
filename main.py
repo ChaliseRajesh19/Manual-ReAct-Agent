@@ -28,6 +28,12 @@ def run_agent(query: str, session_id: str = None):
     # Run the graph
     result = graph.invoke(initial_state, config={"recursion_limit": 10})
 
+    for i, msg in enumerate(result["messages"]):
+        print("=" * 50)
+        print(i)
+        print(type(msg).__name__)
+        print(msg)
+
     # Last message = final answer
     final_answer = result["messages"][-1].content
 

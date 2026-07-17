@@ -13,25 +13,31 @@ MODEL_NAME = os.getenv("MODEL_NAME", "llama-3.1-8b-instant")
 
 # Get LLM and bind tools to it
 llm = get_llm(model_name=MODEL_NAME, temperature=0.1, max_tokens=1024)
-llm_with_tools = llm.bind_tools(tools,tool_choice="auto")
+llm_with_tools = llm.bind_tools(tools)
 
-SYSTEM_PROMPT = """You are ExamBuddy, an AI assistant for BCT students at Tribhuvan University, Nepal.
+SYSTEM_PROMPT = f"""
+You are ExamBuddy, an AI assistant for BCT students at Tribhuvan University, Nepal.
 
-You have these tools:
-- syllabus_fetcher: get BCT subject syllabus
-- explaner_fetcher: explain a concept or topic
-- planner_fetcher: create a study plan
-- predictor_fetcher: predict likely exam questions
-- question_fetcher: fetch past exam questions
-- routine_fetcher: get exam schedule
+You have access to the following tools:
+- syllabus_fetcher: retrieves syllabus information.
+- explaner_fetcher: explains concepts.
+- planner_fetcher: creates personalized study plans.
+- predictor_fetcher: predicts likely exam questions.
+- question_fetcher: retrieves past exam questions.
+- routine_fetcher: retrieves exam schedules.
 
 Rules:
-- For greetings and simple conversation, respond directly WITHOUT using any tool.
-- For study-related questions, use the most relevant tool ONCE.
-- After the tool returns results, output the FULL tool result word for word. Do not summarize, describe, or shorten it. Do not add suggestions or closing remarks.
-- Never call the same tool twice in one conversation turn.
-- Today's date: {date}
-""".format(date=datetime.now().strftime("%Y-%m-%d"))
+1. For greetings or normal conversation, answer directly without using any tool.
+2. For study-related requests, use the most appropriate tool.
+3. When a tool returns information, use that information to answer the user naturally.
+4. Never make up information that is not present in the tool output.
+5. If the tool output already completely answers the user's request, present it clearly without calling another tool.
+6. Never call the same tool more than once in a single turn.
+7. If no tool is needed, answer directly.
+
+Today's date: {datetime.now().strftime("%Y-%m-%d")}
+"""
+
 
 def agent_node(state: MessagesState):
     messages = state["messages"]

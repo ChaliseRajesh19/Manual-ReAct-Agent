@@ -1,3 +1,5 @@
+from unittest import result
+
 from langchain_core.messages import HumanMessage, AIMessage
 from graph.graph import build_graph
 import os
@@ -39,4 +41,5 @@ if __name__ == "__main__":
     session_id = "abc123"  # You can change this to manage different sessions
     while True:
         query = input("Ask ExamBuddy: ")
-        run_agent(query, session_id)
+        result = run_agent(query, session_id)
+        print(f"ExamBuddy: {result}")

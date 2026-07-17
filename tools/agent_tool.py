@@ -11,6 +11,8 @@ from tools.routine_tool import get_routine_results
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 syllabus_index_path = os.path.join(BASE_DIR, "faiss_index", "syllabus_index")
 question_index_path = os.path.join(BASE_DIR, "faiss_index", "past_papers_index")
+syllabus_store = load_syllabus_index(syllabus_index_path)
+question_store = load_question_index(question_index_path)
 
 
 @tool
@@ -20,7 +22,7 @@ def syllabus_fetcher(query: str) -> str:
 
     Returns the retrieved syllabus text.
     """
-    syllabus_store = load_syllabus_index(syllabus_index_path)
+
     docs_str = load_syllabus_info(syllabus_store, query)
     return docs_str
 
@@ -64,7 +66,7 @@ def question_fetcher(query: str) -> str:
     Returns the retrieved question text from the database.
     Does not explain, summarize, or modify the retrieved content.
     """
-    question_store = load_question_index(question_index_path)
+
     docs_str = load_question_info(question_store, query)
     return docs_str
 
